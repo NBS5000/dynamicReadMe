@@ -1,0 +1,22 @@
+{
+  "name": "dynamicreadme",
+  "version": "1.0.0",
+  "description": "wk8 homework, creating a readme generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NBS5000/dynamicReadMe.git"
+  },
+  "author": "Steve Barry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NBS5000/dynamicReadMe/issues"
+  },
+  "homepage": "https://github.com/NBS5000/dynamicReadMe#readme",
+  "dependencies": {
+    "inquirer": "^8.2.0"
+  }
+}
