@@ -4,8 +4,9 @@ const fs = require("fs");
 const fileName = "README.md";
 
 // TODO: Create an array of questions for user input
-const questions = [
-    console.log("If you need help with a question, simply press return without any input"),
+const questions = () => {
+    return inquirer.prompt([
+    // console.log("If you need help with a question, simply press return without any input"),
     {
         type: "input",
         message: "What is the title of your project?",
@@ -20,7 +21,7 @@ const questions = [
     {
         type: "input",
         message: "Please describe the project",
-        name: "description",
+        name: "desc",
         validate(answer) {
             if(!answer) {
                 return "A description isn't too hard, is it?"
@@ -109,11 +110,7 @@ const questions = [
             return true
         }
     },
-
-
-
-
-    console.log("And now the technical stuff"),
+    // console.log("And now the technical stuff"),
     {
         type: "list",
         message: "What type of license does the project have?",
@@ -132,7 +129,7 @@ const questions = [
     {
         type: "input",
         message: "What is your Github name?",
-        name: "github",
+        name: "git",
         validate(answer) {
             if(!answer) {
                 return "Don 't make me repeat myself!"
@@ -152,13 +149,12 @@ const questions = [
             return true
         }
     },
-];
+])};
 
 
 
 // TODO: Create a function to write README file
-function build(data) {
-    let theCode = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git}) =>
+const build = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git,email}) =>
     `
     ${license}
     ## ${title}
@@ -210,23 +206,18 @@ function build(data) {
     ---
     
 
-    `
-    return theCode;
-}
+    `;
+
+    
+
 
 // TODO: Create a function to initialize app
 function init() {
-    inquirer
-    .prompt(questions)
-    .then((data) => {
-        build(data)
-    })
-    .then((code) => {
-        fs.writeFile(fileName, code, (err) =>
-        err ? console.log(err) : console.log('Huzzah!')
-        );
-    });
+    questions()
+    .then((answers)=>fs.writeFileSync(fileName, build(answers)))
+    .catch((err) =>
+    err ? console.log(err) : console.log('Huzzah!') )
 }
 
 // Function call to initialize app
-init();
+init()
