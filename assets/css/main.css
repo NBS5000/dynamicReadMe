@@ -1,11 +1,26 @@
 /*
 -Steve Barry-
-main css file
+css file for generated readme
 */
 
-body{
-    width: 100%;
-    position: relative;
-    background-image: url("../images/bg.png");
-    background-repeat: repeat;
+h1{
+    font-size: 200%;font-weight: bold;
+}
+h2{
+    color: green;
+}
+#star, h2{
+    font-size: 150%;font-weight: bold;
+}
+p{
+    font-size: 100%;
+}
+.center{
+    text-align:center;
+}
+#gitIcon{
+    height: 50px;width: 50px;
+}
+a{
+    text-decoration: none;color:green;
 }

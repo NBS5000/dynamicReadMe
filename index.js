@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const fs = require("fs");
 const fileName = "README.md";
+let licLink;
 
 // TODO: Create an array of questions for user input
 const questions = () => {
@@ -132,7 +133,7 @@ const questions = () => {
         name: "git",
         validate(answer) {
             if(!answer) {
-                return "Don 't make me repeat myself!"
+                return "Don't make me repeat myself!"
             }
             return true
         }
@@ -155,58 +156,56 @@ const questions = () => {
 
 // TODO: Create a function to write README file
 const build = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git,email}) =>
-    `
-    ${license}
-    ## ${title}
     
-    ## <span style="color:green">The Description</span>
-    
-    ${desc}
-    
-    ### ⭐ ⭐ S.T.A.R. ⭐ ⭐
-    
-    **SITUATION**
-    
-    The provided user story was: 
-    
-    > <span style="font-style:italic">AS A ${asa}</span>
-    > 
-    > <span style="font-style:italic">I WANT ${iwant}</span>
-    >
-    > <span style="font-style:italic">SO THAT ${sothat}</span>
-    
-    **TASK**
-    
-    ${usage}
-    
-    ${goal}
-    
-    **ACTION**
-    
-    ${action}
-    
-    **RESULT**
-    
-    ${result}
-    
-    ## <span style="color:green"> The Outcome</span>
-    
-    You can view the finished product [HERE](https://${git}.github.io/${title}/)
-    
-    Alternatively, here is a screenshot:
-    
-    > ![Screenshot of The Weather page](./assets/images/screen.png "Screenshot of The Weather page")
+`<h1 style="font-size: 200%;font-weight: bold;">${title}</h1>
 
-    If you have any questions regarding this, feel free to contact me at [${email}](mailto:${email})
+<h2 style="color: green;font-size: 150%;font-weight: bold;">The Description</h2>
 
-    
-    <p style="text-align:center;">${git}</p>
-    <p style="text-align:center;">[![Github icon](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)](https://github.com/${git})</p>
-    
-    ---
-    
+<p>${desc}</p>
 
-    `;
+<span style="font-size: 150%;font-weight: bold;">⭐ ⭐ S.T.A.R. ⭐ ⭐</span>
+
+<h3>SITUATION</h3>
+
+The provided user story was: 
+
+> <span style="font-style:italic">AS A ${asa}</span>
+> 
+> <span style="font-style:italic">I WANT ${iwant}</span>
+>
+> <span style="font-style:italic">SO THAT ${sothat}</span>
+
+<h3>TASK</h3>
+
+<p>${usage}</p>
+
+<p>${goal}</p>
+
+<h3>ACTION</h3>
+
+<p>${action}</p>
+
+<h3>RESULT<h3>
+
+<p>${result}</p>
+
+<h2> The Outcome</h2>
+
+<p>You can view the finished product <a style="text-decoration: none;color:green;" href="https://${git}.github.io/${title}/" target="_blank">HERE</a>.</p>
+
+<!--p>Alternatively, here is a screenshot:</p>
+
+> ![Screenshot of The Weather page](./assets/images/screen.png "Screenshot of The Weather page")<-->
+
+<p>If you have any questions regarding this, feel free to contact me at <a style="text-decoration: none;color:green;" href="mailto:${email}">${email}</a>.</p>
+
+---
+
+<p style="text-align:center;">${git}</p>
+<p style="text-align:center;"><a href="https://github.com/${git}"><img style="height: 50px;width: 50px;" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="Github icon"></a></p>
+
+
+`;
 
     
 
