@@ -2,7 +2,6 @@
 const inquirer = require('inquirer');
 const fs = require("fs");
 const fileName = "README.md";
-let licLink;
 
 // TODO: Create an array of questions for user input
 const questions = () => {
@@ -67,7 +66,7 @@ const questions = () => {
     },
     {
         type: "input",
-        message: " \nWhat is the intended usage of the project?",
+        message: " \nWhat is the intended usage of the project?\n",
         name: "usage",
         validate(answer) {
             if(!answer) {
@@ -99,31 +98,16 @@ const questions = () => {
         }
     },
     {
-        type: "input",
-        message: " \nHow did it go? Were the targets met? How so?\n",
-        name: "result",
-        validate(answer) {
-            if(!answer) {
-                return "List the tasks and actions you did to achieve the end result"
-            }else if(answer.length < 30){
-                return "You'll need to be a bit more detailed than that."
-            }
-            return true
-        }
-    },
-    // console.log("And now the technical stuff"),
-    {
         type: "list",
         message: " \nAnd now the technical stuff\n\nWhat type of license does the project have?",
         choices: [
             "GNU AGPLv3",
-            "GNU GPLv3",
+            "CC0",
             "GNU LGPLv3",
             "Mozilla Public License 2.0",
             "Apache License 2.0",
             "MIT License",
             "Boost Software License 1.0",
-            "The Unlicense",
         ],
         name: 'license',
     },
@@ -173,18 +157,18 @@ const questions = () => {
             return true
         }
     },
-    {
-        type: "input",
-        message: " \nwhat is your email address?\n",
-        name: "email",
-        validate: (answer) => {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-            if(!emailRegex.test(answer)) {
-                return "You have to provide a valid email address!"
-            }
-            return true
-        }
-    },
+    // {
+    //     type: "input",
+    //     message: " \nwhat is your email address?\n",
+    //     name: "email",
+    //     validate: (answer) => {
+    //         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    //         if(!emailRegex.test(answer)) {
+    //             return "You have to provide a valid email address!"
+    //         }
+    //         return true
+    //     }
+    // },
 ])};
 
 
@@ -199,23 +183,56 @@ const build = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git
         `<p>Alternatively, here is a screenshot:</p>
         <img style='width:400px;height:auto;' src='./assets/images/${screenName}${screenExt}' alt='Screenshot of project'></img>`;
     }
+    let licLink;
+    switch (license){
+        case "GNU AGPLv3":
+            licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-AGPL_v3-blue.svg' alt='License badge'/>";
+            break;
+        case "GNU LGPLv3":
+            licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-LGPL_v3-blue.svg' alt='License badge'/>";
+            break;    
+        case "CC0":
+            licLink = "<img style='height:15px;width:80px;' src='License: CC0-1.0](https://licensebuttons.net/l/zero/1.0/80x15.png' alt='License badge'/>";
+            break;
+        case "Mozilla Public License 2.0":
+            licLink = "<img src='https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg' alt='License badge'/>";
+            break;
+        case "Apache License 2.0":
+            licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-Apache_2.0-blue.svg' alt='License badge'/>";
+            break;
+        case "MIT License":
+            licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-MIT-yellow.svg' alt='License badge'/>";
+            break;
+        case "Boost Software License 1.0":
+            licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-Boost_1.0-lightblue.svg' alt='License badge'/>";
+            break;
+    }
 
     return `<h1 style="font-size: 200%;font-weight: bold;">${title}</h1>
 
+${licLink}
+
+<h2 style="color: green;font-size: 150%;font-weight: bold;">Table of Contents</h2>
+
+<div id="table" style="margin-left:3%; color:white">
+
+- [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Credits](#credits)
+- [Contributing](#contributing)
+- [Tests](#tests)
 - [License](#license)
+- [Questions & Contact](#questions)
 
-<h2 style="color: green;font-size: 150%;font-weight: bold;">The Description</h2>
+</div>
+
+<h2 id="description" style="color: green;font-size: 150%;font-weight: bold;">Description</h2>
 
 <p>${desc}</p>
 
-<span style="font-size: 150%;font-weight: bold;">⭐ ⭐ S.T.A.R. ⭐ ⭐</span>
+<h2 id="installation" style="color: green;font-size: 150%;font-weight: bold;">Installation</h2>
 
-<h3>SITUATION</h3>
-
-The provided user story was: 
+<h2 id="usage" style="color: green;font-size: 150%;font-weight: bold;">Usage</h2>
 
 > <span style="font-style:italic">AS A ${asa}</span>
 > 
@@ -223,27 +240,27 @@ The provided user story was:
 >
 > <span style="font-style:italic">SO THAT ${sothat}</span>
 
-<h3>TASK</h3>
-
 <p>${usage}</p>
 
-<p>${goal}</p>
+<h2 id="contributing" style="color: green;font-size: 150%;font-weight: bold;">Contributing</h2>
 
-<h3>ACTION</h3>
+<p>To fork this project, click the "fork" button at the top of the repository. Once you've made any amendments, click "Create Pull Request" and your contributions will be reviewed.</p>
 
-<p>${action}</p>
-
-<h3>RESULT<h3>
-
-<p>${result}</p>
-
-<h2> The Outcome</h2>
-
-<p>You can view the finished product <a style="text-decoration: none;color:green;" href="https://${git}.github.io/${title}/" target="_blank">HERE</a>.</p>
+<p>You can view the project <a style="text-decoration: none;color:green;" href="https://${git}.github.io/${title}/" target="_blank">HERE</a>.</p>
 
 ${screenshot}
 
-<p>If you have any questions regarding this, feel free to contact me at <a style="text-decoration: none;color:green;" href="mailto:${email}">${email}</a>.</p>
+<h2 id="tests" style="color: green;font-size: 150%;font-weight: bold;">Tests</h2>
+
+<h2 id="license" style="color: green;font-size: 150%;font-weight: bold;">License</h2>
+
+${licLink}
+
+${license} ©️ ${git}
+
+<h2 id="questions" style="color: green;font-size: 150%;font-weight: bold;">Questions & Contact</h2>
+
+<p>If you have any questions regarding this, feel free to email <a style="text-decoration: none;color:green;" href="mailto:${email}">${email}</a>, or visit my Github by clicking below.</p>
 
 ---
 
@@ -251,6 +268,7 @@ ${screenshot}
 <p style="text-align:center;"><a href="https://github.com/${git}"><img style="height: 50px;width: 50px;" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="Github icon"></a></p>
 
 
+    
 `};
 
 
