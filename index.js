@@ -101,6 +101,7 @@ const questions = () => {
         }
     },
     {
+        // If previous answer was yes, then ask for details of the image
         type: "input",
         message: " \nWhat is the file name (not including ext)?\n",
         name: "screenName",
@@ -151,7 +152,7 @@ const questions = () => {
 
 
 const build = ({license,title,desc,asa,iwant,sothat,usage,git,email, screenName,screenExt}) => {
-
+    // transform repo name to readable title
     let friendly, camel, correct;
     camel = title;
     friendly = camel.replace(/([A-Z]+)/g, " $1");
@@ -159,9 +160,9 @@ const build = ({license,title,desc,asa,iwant,sothat,usage,git,email, screenName,
     friendly = friendly.replace(/_/g, ' ');
     friendly = friendly.replace(/-/g, ' ');
     friendly = friendly.replace(/\s\s+/g, ' ');
-
     correct = friendly;
 
+    // If there is a screenshot, add it to the file
     let screenshot;
     if(!screenName){
         screenshot = "";
@@ -170,6 +171,8 @@ const build = ({license,title,desc,asa,iwant,sothat,usage,git,email, screenName,
         `<p>Alternatively, here is a screenshot:</p>
         <img style='width:400px;height:auto;' src='./assets/images/${screenName}${screenExt}' alt='Screenshot of project'></img>`;
     }
+
+    // Display badge and link to info for the selected license
     let licLink, licInfo;
     switch (license){
         case "GNU AGPLv3":
@@ -203,7 +206,7 @@ const build = ({license,title,desc,asa,iwant,sothat,usage,git,email, screenName,
     }
 
 
-
+// The readme file structure with input variables
 let file =  `
 <h1 style="font-size: 200%;font-weight: bold;">${correct}</h1>
 
@@ -270,6 +273,8 @@ ${licInfo}
 
     
 `
+console.log("\n\x1b[32m** Your readme file has successfully been created **\x1b[0m\n\n")
+// Return and create file
 return file;
 };
 
