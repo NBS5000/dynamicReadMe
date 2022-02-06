@@ -7,14 +7,13 @@ const fileName = "README.md";
 // TODO: Create an array of questions for user input
 const questions = () => {
     return inquirer.prompt([
-    // console.log("If you need help with a question, simply press return without any input"),
     {
         type: "input",
-        message: "What is the title of your project?\n",
+        message: "\n\x1b[4m\x1b[33m**If you need help with a question, simply press return without any input**\x1b[0m \x1b[0m \n\nWhat is the name of your project in Github?\n",
         name: "title",
         validate(answer) {
             if(!answer) {
-                return "Please enter the name of your project!"
+                return "Please enter the name of your project as it is named in Github"
             }
             return true
         }
@@ -27,7 +26,7 @@ const questions = () => {
             if(!answer) {
                 return "A description isn't too hard, is it?"
             }else if(answer.length < 30){
-                return "Please enter a bit more detail, at least 30 characters!"
+                return "Please enter a bit more detail, at least 30 characters"
             }
             return true
         }
@@ -49,7 +48,7 @@ const questions = () => {
         name: "iwant",
         validate(answer) {
             if(!answer) {
-                return "The User Story Strikes Back!.....what do you want to achieve?"
+                return "The User Story Strikes Back!.....what does the user want to achieve?"
             }
             return true
         }
@@ -71,36 +70,14 @@ const questions = () => {
         name: "usage",
         validate(answer) {
             if(!answer) {
-                return "You do need to say what the usage is!"
-            }
-            return true
-        }
-    },
-    {
-        type: "input",
-        message: " \nWhat is the end goal of this project?\n",
-        name: "goal",
-        validate(answer) {
-            if(!answer) {
-                return "What will this project achieve?"
-            }
-            return true
-        }
-    },
-    {
-        type: "input",
-        message: " \nWhat did you do to achieve the end goal?\n",
-        name: "action",
-        validate(answer) {
-            if(!answer) {
-                return "List the tasks and actions you did to achieve the end result"
+                return "How will the project be used?"
             }
             return true
         }
     },
     {
         type: "list",
-        message: " \nAnd now the technical stuff\n\nWhat type of license does the project have?",
+        message: "\n\n\x1b[32mAnd now the technical stuff!\x1b[0m\n\nWhat type of license does the project have?",
         choices: [
             "GNU AGPLv3",
             "CC0",
@@ -114,7 +91,7 @@ const questions = () => {
     },
     {
         type: "confirm",
-        message: " \Is there a screenshot in the images folder?\n",
+        message: " \nIs there a screenshot in the ./assets/images folder?\n",
         name: "screenConf",
         validate(answer) {
             if(!answer) {
@@ -137,7 +114,7 @@ const questions = () => {
     },
     {
         type: "list",
-        message: " \Is there a screenshot in the images folder?\n",
+        message: " \nWhat is the extension of the file?\n",
         name: "screenExt",
         when: (answers) => answers.screenName,
         choices: [
@@ -158,24 +135,33 @@ const questions = () => {
             return true
         }
     },
-    // {
-    //     type: "input",
-    //     message: " \nwhat is your email address?\n",
-    //     name: "email",
-    //     validate: (answer) => {
-    //         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    //         if(!emailRegex.test(answer)) {
-    //             return "You have to provide a valid email address!"
-    //         }
-    //         return true
-    //     }
-    // },
+    {
+        type: "input",
+        message: " \nwhat is your email address?\n",
+        name: "email",
+        validate: (answer) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            if(!emailRegex.test(answer)) {
+                return "You have to provide a valid email address format"
+            }
+            return true
+        }
+    },
 ])};
 
 
+const build = ({license,title,desc,asa,iwant,sothat,usage,git,email, screenName,screenExt}) => {
 
-// TODO: Create a function to write README file
-const build = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git,email, screenName,screenExt}) => {
+    let friendly, camel, correct;
+    camel = title;
+    friendly = camel.replace(/([A-Z]+)/g, " $1");
+    friendly = friendly[0].charAt(0).toUpperCase() + friendly.slice(1);
+    friendly = friendly.replace(/_/g, ' ');
+    friendly = friendly.replace(/-/g, ' ');
+    friendly = friendly.replace(/\s\s+/g, ' ');
+
+    correct = friendly;
+
     let screenshot;
     if(!screenName){
         screenshot = "";
@@ -184,74 +170,41 @@ const build = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git
         `<p>Alternatively, here is a screenshot:</p>
         <img style='width:400px;height:auto;' src='./assets/images/${screenName}${screenExt}' alt='Screenshot of project'></img>`;
     }
-    let licLink;
+    let licLink, licInfo;
     switch (license){
         case "GNU AGPLv3":
             licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-AGPL_v3-blue.svg' alt='License badge'/>";
+            licInfo = "<a href='https://www.gnu.org/licenses/agpl-3.0' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;
         case "GNU LGPLv3":
             licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-LGPL_v3-blue.svg' alt='License badge'/>";
+            licInfo = "<a href='https://www.gnu.org/licenses/lgpl-3.0' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;    
         case "CC0":
             licLink = "<img style='height:15px;width:80px;' src='License: CC0-1.0](https://licensebuttons.net/l/zero/1.0/80x15.png' alt='License badge'/>";
+            licInfo = "<a href='http://creativecommons.org/publicdomain/zero/1.0/' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;
         case "Mozilla Public License 2.0":
             licLink = "<img src='https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg' alt='License badge'/>";
+            licInfo = "<a href='https://opensource.org/licenses/MPL-2.0' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;
         case "Apache License 2.0":
             licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-Apache_2.0-blue.svg' alt='License badge'/>";
+            licInfo = "<a href='https://opensource.org/licenses/Apache-2.0' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;
         case "MIT License":
             licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-MIT-yellow.svg' alt='License badge'/>";
+            licInfo = "<a href='https://opensource.org/licenses/MIT' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;
         case "Boost Software License 1.0":
             licLink = "<img style='height:15px;width:80px;' src='https://img.shields.io/badge/License-Boost_1.0-lightblue.svg' alt='License badge'/>";
+            licInfo = "<a href='https://www.boost.org/LICENSE_1_0.txt' style='text-deocration:none;'>Click here for more information on this license.</a>";
             break;
     }
 
-    let friendly, camel, correct;
-    camel = title;
-    friendly = camel.replace(/([A-Z]+)/g, " $1");
-    friendly = friendly[0].charAt(0).toUpperCase() + friendly.slice(1);
 
 
-    let xyz = inquirer.prompt([
-        {
-            type: "confirm",
-            message: "Is this correct? " + friendly + "\n",
-            name: "newTitle",
-            validate(answer) {
-                if(!answer) {
-                    return "Yes or no"
-                }else if(answer === true){
-                    return friendly;
-                }else{
-
-                }            
-            }
-        }, 
-        {
-            type: "input",
-            message: " \What is the read friendly name?\n",
-            name: "readFriendly",
-            when: (answer) => answer.newTitle === false,
-            validate(answer) {
-                if(!answer) {
-                    return "Enter the read friendly name"
-                }else{
-                    return readFriendly;
-                }
-            }
-        },
-    ]);
-    if(answer.readFriendly){
-        correct = xyz;
-    }else{
-        correct = friendly;
-    }
-// await correct;
-
-return `
+let file =  `
 <h1 style="font-size: 200%;font-weight: bold;">${correct}</h1>
 
 ${licLink}
@@ -264,7 +217,6 @@ ${licLink}
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [Tests](#tests)
 - [License](#license)
 - [Questions & Contact](#questions)
 
@@ -275,6 +227,10 @@ ${licLink}
 <p>${desc}</p>
 
 <h2 id="installation" style="color: green;font-size: 150%;font-weight: bold;">Installation</h2>
+
+<p>To install this, ensure you have Node.js. Inquirer is also required:</p>
+
+> <p style="font-family: monospace, monospace;">npm install inquirer</p>
 
 <h2 id="usage" style="color: green;font-size: 150%;font-weight: bold;">Usage</h2>
 
@@ -294,13 +250,13 @@ ${licLink}
 
 ${screenshot}
 
-<h2 id="tests" style="color: green;font-size: 150%;font-weight: bold;">Tests</h2>
-
 <h2 id="license" style="color: green;font-size: 150%;font-weight: bold;">License</h2>
 
 ${licLink}
 
 ${license} ©️ ${git}
+
+${licInfo}
 
 <h2 id="questions" style="color: green;font-size: 150%;font-weight: bold;">Questions & Contact</h2>
 
@@ -313,13 +269,15 @@ ${license} ©️ ${git}
 
 
     
-`};
+`
+return file;
+};
 
 
 // TODO: Create a function to initialize app
 function init() {
     questions()
-    .then((answers)=>fs.writeFile(fileName, build(answers)))
+    .then((answers)=>fs.writeFileSync(fileName, build(answers)))
     .catch((err) =>
     err ? console.log(err) : console.log('Huzzah!') )
 }
