@@ -60,6 +60,8 @@ The end code is stored on Github, and publicly available and viewable. This resu
 
 As the acceptance criteria has been met and exceeded, the task is now complete. 
 
+An example of the readme output is included in the Github repo under Code > asstes/examples.
+
 A video of the demonstration of the CLI application can be viewed here: 
 
 > <a href="https://watch.screencastify.com/v/FBt117qRdsNqJ91mKaND">https://watch.screencastify.com/v/FBt117qRdsNqJ91mKaND</a>
