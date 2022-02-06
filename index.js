@@ -1,6 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require("fs");
+const { finished } = require('stream');
 const fileName = "README.md";
 
 // TODO: Create an array of questions for user input
@@ -208,7 +209,50 @@ const build = ({license,title,desc,asa,iwant,sothat,usage,goal,action,result,git
             break;
     }
 
-    return `<h1 style="font-size: 200%;font-weight: bold;">${title}</h1>
+    let friendly, camel, correct;
+    camel = title;
+    friendly = camel.replace(/([A-Z]+)/g, " $1");
+    friendly = friendly[0].charAt(0).toUpperCase() + friendly.slice(1);
+
+
+    let xyz = inquirer.prompt([
+        {
+            type: "confirm",
+            message: "Is this correct? " + friendly + "\n",
+            name: "newTitle",
+            validate(answer) {
+                if(!answer) {
+                    return "Yes or no"
+                }else if(answer === true){
+                    return friendly;
+                }else{
+
+                }            
+            }
+        }, 
+        {
+            type: "input",
+            message: " \What is the read friendly name?\n",
+            name: "readFriendly",
+            when: (answer) => answer.newTitle === false,
+            validate(answer) {
+                if(!answer) {
+                    return "Enter the read friendly name"
+                }else{
+                    return readFriendly;
+                }
+            }
+        },
+    ]);
+    if(answer.readFriendly){
+        correct = xyz;
+    }else{
+        correct = friendly;
+    }
+// await correct;
+
+return `
+<h1 style="font-size: 200%;font-weight: bold;">${correct}</h1>
 
 ${licLink}
 
@@ -275,7 +319,7 @@ ${license} ©️ ${git}
 // TODO: Create a function to initialize app
 function init() {
     questions()
-    .then((answers)=>fs.writeFileSync(fileName, build(answers)))
+    .then((answers)=>fs.writeFile(fileName, build(answers)))
     .catch((err) =>
     err ? console.log(err) : console.log('Huzzah!') )
 }
